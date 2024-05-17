@@ -27,3 +27,4 @@ Below is the organization of files within this repository:
 - **exp_restormer.py**
 - **exp_nafnet.py**
 - **expt_lakdnet.py**
+- **evaluate.py**  # Calculate PSNR and SSIM
