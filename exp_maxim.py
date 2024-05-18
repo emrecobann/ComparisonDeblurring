@@ -1,21 +1,20 @@
-from PIL import Image
-import matplotlib.pyplot as plt
-import collections
-import importlib
 import io
 import os
 import math
-import requests
-from tqdm import tqdm
-import gdown  # to download weights from Drive
 import flax
-import jax.numpy as jnp
-import ml_collections
+import gdown
+import requests
+import importlib
 import numpy as np
+import collections
+from PIL import Image
+from tqdm import tqdm
+import jax.numpy as jnp
 import tensorflow as tf
+import matplotlib.pyplot as plt
 from jax.experimental import jax2tf
 
-
+# Model Setting and Configuration
 _MODEL_FILENAME = "maxim"
 
 _MODEL_VARIANT_DICT = {
@@ -72,6 +71,9 @@ def recover_tree(keys, values):
 
 
 def build_model(task="Deblurring"):
+    """
+    Builds model for deblurring task.
+    """
     model_mod = importlib.import_module(f"maxim.models.{_MODEL_FILENAME}")
     model_configs = ml_collections.ConfigDict(_MODEL_CONFIGS)
 
@@ -82,7 +84,9 @@ def build_model(task="Deblurring"):
 
 
 def make_shape_even(image):
-    """Pad the image to have even shapes."""
+    """
+    Pad the image to have even shapes.
+    """
     height, width = image.shape[0], image.shape[1]
     padh = 1 if height % 2 != 0 else 0
     padw = 1 if width % 2 != 0 else 0
@@ -91,7 +95,9 @@ def make_shape_even(image):
 
 
 def mod_padding_symmetric(image, factor=64):
-    """Padding the image to be divided by factor."""
+    """
+    Padding the image to be divided by factor.
+    """
     height, width = image.shape[0], image.shape[1]
     height_pad, width_pad = ((height + factor) // factor) * factor, (
         (width + factor) // factor
@@ -149,8 +155,9 @@ def post_process(preds, height, width, height_even, width_even):
 
 
 def get_params(ckpt_path):
-    """Get params checkpoint."""
-
+    """
+    Get params checkpoint.
+    """
     with tf.io.gfile.GFile(ckpt_path, "rb") as f:
         data = f.read()
     values = np.load(io.BytesIO(data))
@@ -159,7 +166,7 @@ def get_params(ckpt_path):
 
     return params
 
-
+# Arrange model path and build model.
 MODEL_PATH = "maxim_model/adobe.npz"
 FLAGS = DummyFlags(ckpt_path=MODEL_PATH, task="Deblurring")
 
