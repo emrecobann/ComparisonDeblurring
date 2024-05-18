@@ -1,13 +1,13 @@
 import os
-import torch
-import torchvision.utils as vutils
-from LAKDNET.LaKDNet.util.util import read_image, crop_image
-from pathlib import Path
-from glob import glob
-from natsort import natsorted
-from LAKDNET.LaKDNet.models.LaKDNet import LaKDNet
 import yaml
+import torch
 from tqdm import tqdm
+from glob import glob
+from pathlib import Path
+from natsort import natsorted
+import torchvision.utils as vutils
+from LAKDNET.LaKDNet.models.LaKDNet import LaKDNet
+from LAKDNET.LaKDNet.util.util import read_image, crop_image
 
 # Hardcoded paths
 dataset_dir = "dataset"
@@ -38,6 +38,14 @@ network.load_state_dict(torch.load(net_weight))
 
 
 def process_images(input_file_path_list, result_dir, network):
+    """
+    Returns the processed image.
+
+    Arguments:
+        input_file_path_list: Main path of blurred images
+        result_dir: The path that outputs will save
+        network: Represents the model
+    """
     # Process each image
     for input_path in tqdm(input_file_path_list):
         # Read and preprocess input image
