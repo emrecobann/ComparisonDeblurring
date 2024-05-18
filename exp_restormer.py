@@ -1,16 +1,15 @@
 import os
-import torch
-import torch.nn.functional as F
-import torchvision.transforms.functional as TF
-from runpy import run_path
-from skimage import img_as_ubyte
-from glob import glob
 import cv2
-from tqdm import tqdm
+import torch
 import argparse
 import numpy as np
+from glob import glob
+from tqdm import tqdm
+from runpy import run_path
 from natsort import natsorted
-
+import torch.nn.functional as F
+from skimage import img_as_ubyte
+import torchvision.transforms.functional as TF
 
 ## Prepare Model
 def get_weights_and_parameters(parameters):
@@ -35,6 +34,7 @@ parameters = {
     "dual_pixel_task": False,
 }
 
+# Load the Restormer model as pre-trained 
 weights, parameters = get_weights_and_parameters(parameters)
 
 load_arch = run_path(os.path.join("Restormer","basicsr", "models", "archs", "restormer_arch.py"))
@@ -45,8 +45,7 @@ checkpoint = torch.load(weights)
 model.load_state_dict(checkpoint["params"])
 model.eval()
 
-# Inference
-
+# Create a directory for dataset
 input_dir = "dataset"
 out_dir = "restormer_outputs"
 os.makedirs(out_dir, exist_ok=True)
@@ -55,6 +54,7 @@ files = natsorted(glob(os.path.join(input_dir, "*")))
 
 img_multiple_of = 8
 
+# Run inference over the dataset
 with torch.no_grad():
     for filepath in tqdm(files):
         # print(file_)
