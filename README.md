@@ -1,4 +1,4 @@
-## PreTrained Models
+## Reach the Pre-Trained Models
 
 - [Maxim](https://console.cloud.google.com/storage/browser/gresearch/maxim/ckpt/Deblurring/GoPro)
 - [Restormer](https://github.com/swz30/Restormer/releases/download/v1.0/motion_deblurring.pth)
