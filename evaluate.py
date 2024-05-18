@@ -1,13 +1,13 @@
 import os
-from glob import glob
-from natsort import natsorted
-import numpy as np
-from skimage.metrics import peak_signal_noise_ratio as compute_psnr
-from skimage.metrics import structural_similarity as compute_ssim
-from skimage.io import imread
 import torch
 import lpips
+import numpy as np
+from glob import glob
+from natsort import natsorted
+from skimage.io import imread
 from DISTS_pytorch import DISTS
+from skimage.metrics import peak_signal_noise_ratio as compute_psnr
+from skimage.metrics import structural_similarity as compute_ssim
 
 # Directories
 dataset_dir = "dataset"
@@ -30,6 +30,13 @@ dists_fn = dists_fn.to(device)
 
 
 def calculate_metrics(gt_img, pred_img):
+    """
+    Returns the psnr, ssim, lpips, and dists evaluation metrics
+
+    Arguments:
+        gt_img: Ground truth image
+        pred_img: Deblurred image 
+    """
     psnr = compute_psnr(gt_img, pred_img, data_range=gt_img.max() - gt_img.min())
     ssim = compute_ssim(
         gt_img,
@@ -66,6 +73,13 @@ def calculate_metrics(gt_img, pred_img):
 
 
 def process_model_outputs(output_dir, gt_files):
+    """
+    Returns the evaluation results for each model for each dataset
+
+    Arguments:
+        output_dir: Represents the output path that results will be saved
+        gt_files: Represents the ground truth image files path
+    """
     psnr_values = []
     ssim_values = []
     lpips_values = []
